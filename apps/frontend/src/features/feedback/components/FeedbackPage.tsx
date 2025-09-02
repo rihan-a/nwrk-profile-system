@@ -3,7 +3,7 @@ import { FeedbackForm, FeedbackList, useFeedback } from '../index';
 import { UserRole } from '../../../shared/types';
 import { Card } from '../../../shared/components/ui/Card';
 import { Button } from '../../../shared/components/ui/Button';
-import { Plus, X, Users, Shield, MessageSquare } from 'lucide-react';
+import { Plus, X, Users, MessageSquare } from 'lucide-react';
 
 interface FeedbackPageProps {
   profileId: string;
@@ -55,7 +55,6 @@ export const FeedbackPage: React.FC<FeedbackPageProps> = ({
           <p className="text-gray-600 mt-1">
             {currentUser.role === UserRole.MANAGER ? (
               <span className="flex items-center space-x-2">
-                <Shield className="w-4 h-4 text-blue-600" />
                 <span>Manager view - You can see all feedback across the organization</span>
               </span>
             ) : (
