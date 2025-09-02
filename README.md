@@ -48,9 +48,18 @@ newwork-task-rihan/
 
 ## 🔒 Role-Based Access
 
-- **Manager**: Full CRUD access to all employee profiles
+- **Manager**: Full CRUD access to all employee profiles + absence approvals
 - **Employee**: Read/write access to own profile + absence management
 - **Co-worker**: Read access to public profile data + feedback system
+
+## 📅 Absence Management Features
+
+- **Request Creation**: Employees can submit absence requests with date ranges
+- **Manager Approval**: Managers can approve/reject pending requests
+- **Status Tracking**: Real-time status updates (Pending, Approved, Rejected)
+- **Date Validation**: Business rules for date ranges and conflicts
+- **Statistics**: Absence history and approval rates
+- **Notifications**: Toast notifications for all actions
 
 ## 🌟 Features Implemented
 
@@ -62,17 +71,24 @@ newwork-task-rihan/
 - [x] Role-based navigation and UI components
 - [x] Mock data and API endpoints
 
-### Phase 2 (Next)
-- [ ] Profile viewing and editing
-- [ ] Complete profile management system
+### Phase 2 ✅
+- [x] Profile viewing and editing
+- [x] Complete profile management system
+- [x] Role-based data filtering
+- [x] Profile dashboard and browser
 
-### Phase 3 (Future)
-- [ ] AI-enhanced feedback system
-- [ ] Gemini API integration
+### Phase 3 ✅
+- [x] AI-enhanced feedback system
+- [x] Gemini API integration
+- [x] Feedback forms and management
+- [x] Real-time feedback updates
 
-### Phase 4 (Future)
-- [ ] Absence request management
-- [ ] Approval workflows
+### Phase 4 ✅
+- [x] Absence request management
+- [x] Manager approval workflows
+- [x] Date picker with validation
+- [x] Toast notifications and UI polish
+- [x] Comprehensive demo data
 
 ## 🧪 Testing
 
