@@ -36,6 +36,15 @@ export interface EmployeeProfile {
     relationship: string;
   };
   
+  // Additional professional info (manager/owner only)
+  performanceRating?: number;
+  certifications?: string[];
+  workHistory?: {
+    company: string;
+    position: string;
+    duration: string;
+  }[];
+  
   // Feedback & requests
   feedback: Feedback[];
   absenceRequests: AbsenceRequest[];
@@ -45,6 +54,7 @@ export interface Feedback {
   id: string;
   fromUserId: string;
   fromUserName: string;
+  toUserId: string; // Add recipient ID for role-based filtering
   content: string;
   enhancedContent?: string;
   isEnhanced: boolean;
