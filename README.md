@@ -2,6 +2,33 @@
 
 A simple HR app where employees can manage their profiles, request time off, and give feedback to each other. Different people see different things based on their role.
 
+
+## Core Requirements Met
+
+### Employee Profile Management ✅
+- Role-based data visibility (public vs sensitive data)
+- Managers and profile owners can see/edit all data
+- Co-workers see only non-sensitive data
+- Proper data filtering in profile.controller.ts
+
+### Feedback System ✅
+- Co-workers can leave feedback
+- AI enhancement implemented using Google Gemini API
+- Role-based feedback visibility
+- Professional feedback enhancement with safety filtering
+
+### Absence Request System ✅
+- Employees can request absences
+- Manager approval workflow
+- Status tracking (pending/approved/rejected)
+- Proper validation and date handling
+
+### Role-Based Access Control ✅
+- Three roles: Manager, Employee, Co-worker
+- Proper middleware implementation
+- Data filtering based on user permissions
+
+
 ## How to Run
 
 1. **Install everything:**
