@@ -9,8 +9,8 @@ import { feedbackRoutes } from './features/feedback/feedback.routes.js';
 import { absenceRoutes } from './features/absence/absence.routes.js';
 import configRoutes from './features/config/config.routes.js';
 
-// Load environment variables from .env.backend file
-dotenv.config({ path: '.env.backend' });
+// Load environment variables from .env file
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
