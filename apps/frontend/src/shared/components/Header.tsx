@@ -49,15 +49,11 @@ export const Header: React.FC = () => {
 
   return (
     <header className="bg-gray-900 shadow-sm border-b border-gray-700">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className=" mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo and Title */}
           <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <div className="w-8 h-8 bg-blue-600 flex items-center justify-center">
-                <Shield className="w-5 h-5 text-white" />
-              </div>
-            </div>
+
             <h1 className="ml-3 text-xl font-semibold text-white">
               Employee Profile System
             </h1>
@@ -79,10 +75,10 @@ export const Header: React.FC = () => {
                 </p>
                 <p className="text-xs text-gray-400">{user.email}</p>
               </div>
-              
+
               {/* User Avatar */}
               <div className="w-8 h-8 bg-blue-900 flex items-center justify-center">
-                                  <span className="text-sm font-medium text-blue-200">
+                <span className="text-sm font-medium text-blue-200">
                   {user.firstName.charAt(0)}{user.lastName.charAt(0)}
                 </span>
               </div>
