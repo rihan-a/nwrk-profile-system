@@ -27,13 +27,13 @@ export const useFeedback = (): UseFeedbackReturn => {
       
       const storedFeedback = localStorageService.loadFeedback();
       setFeedback(storedFeedback);
-      console.log('📂 Initial feedback loaded from localStorage:', storedFeedback.length, 'items');
+
     }
   }, []);
 
   const refreshFeedback = useCallback(async (profileId: string, currentUser: { id: string; role: UserRole }) => {
     try {
-      console.log('🔄 Refreshing feedback for profile:', profileId, 'user:', currentUser);
+
       setLoading(true);
       setError(null);
       
@@ -41,24 +41,24 @@ export const useFeedback = (): UseFeedbackReturn => {
       if (localStorageService.isAvailable()) {
         const localFeedback = localStorageService.getFeedbackForProfile(profileId);
         setFeedback(localFeedback);
-        console.log('📂 Loaded from localStorage for profile', profileId + ':', localFeedback.length, 'items');
+
       }
       
       // Then try to fetch from API for latest data
       try {
         const url = `${API_BASE_URL}/api/feedback/profiles/${profileId}`;
-        console.log('📡 Fetching from URL:', url);
+
         
         const response = await fetch(url, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('authToken')}`
           }
         });
-        console.log('📡 Refresh response status:', response.status);
+
         
         if (response.ok) {
           const result = await response.json();
-          console.log('✅ Refresh API response:', result);
+
           const apiFeedback = result.data || [];
           
           // Update localStorage with fresh data
@@ -67,16 +67,16 @@ export const useFeedback = (): UseFeedbackReturn => {
             const otherFeedback = allFeedback.filter(f => f.toUserId !== profileId);
             const updatedFeedback = [...apiFeedback, ...otherFeedback];
             localStorageService.saveFeedback(updatedFeedback);
-            console.log('💾 Updated localStorage with fresh data');
+
           }
           
           setFeedback(apiFeedback);
-          console.log('🔄 Feedback list updated from API:', apiFeedback);
+
         } else {
-          console.warn('⚠️ API fetch failed, using localStorage data');
+
         }
       } catch (apiError) {
-        console.warn('⚠️ API fetch failed, using localStorage data:', apiError);
+
         // Continue using localStorage data
       }
     } catch (err) {
@@ -97,16 +97,16 @@ export const useFeedback = (): UseFeedbackReturn => {
     };
     
     try {
-      console.log('🚀 Creating feedback for profile:', profileId, feedbackData);
+
       setError(null);
       
-      console.log('📝 Adding optimistic feedback:', optimisticFeedback);
+
       setFeedback(prev => [optimisticFeedback, ...prev]);
 
       // Save to localStorage immediately for offline support
       if (localStorageService.isAvailable()) {
         localStorageService.addFeedback(optimisticFeedback);
-        console.log('💾 Optimistic feedback saved to localStorage');
+
       }
 
       try {
@@ -119,11 +119,11 @@ export const useFeedback = (): UseFeedbackReturn => {
           body: JSON.stringify(feedbackData),
         });
 
-        console.log('📡 API response status:', response.status);
+
         
         if (response.ok) {
           const result = await response.json();
-          console.log('✅ API success response:', result);
+
           
           // Replace optimistic feedback with real one
           const realFeedback = result.data as Feedback;
@@ -136,17 +136,17 @@ export const useFeedback = (): UseFeedbackReturn => {
           // Update localStorage with real feedback
           if (localStorageService.isAvailable()) {
             localStorageService.updateFeedback(realFeedback);
-            console.log('💾 Real feedback saved to localStorage');
+
           }
           
-          console.log('🔄 Feedback list updated with real feedback');
+
         } else {
           const errorText = await response.text();
-          console.error('❌ API error response:', errorText);
+
           throw new Error('Failed to create feedback');
         }
       } catch (apiError) {
-        console.warn('⚠️ API call failed, keeping optimistic feedback in localStorage:', apiError);
+
         // Keep the optimistic feedback in localStorage for offline support
         // The user will see their feedback immediately, and it will sync when online
       }
@@ -171,7 +171,7 @@ export const useFeedback = (): UseFeedbackReturn => {
       // Remove from localStorage immediately
       if (localStorageService.isAvailable()) {
         localStorageService.removeFeedback(feedbackId);
-        console.log('🗑️ Feedback removed from localStorage:', feedbackId);
+
       }
 
       try {
@@ -186,9 +186,9 @@ export const useFeedback = (): UseFeedbackReturn => {
           throw new Error('Failed to delete feedback');
         }
         
-        console.log('✅ Feedback deleted from API:', feedbackId);
+
       } catch (apiError) {
-        console.warn('⚠️ API delete failed, but feedback removed from localStorage:', apiError);
+
         // Keep the optimistic update since we removed from localStorage
       }
     } catch (err) {

@@ -39,7 +39,7 @@ const Feedback = () => {
       if (localStorageService.isAvailable()) {
         const localFeedback = localStorageService.getFeedbackReceivedByUser(user!.id);
         setFeedback(localFeedback);
-        console.log('📂 Loaded received feedback from localStorage:', localFeedback.length, 'items');
+
       }
       
       // Then try to fetch from API for latest data
@@ -61,16 +61,16 @@ const Feedback = () => {
             const otherFeedback = allFeedback.filter(f => f.toUserId !== user!.id);
             const updatedFeedback = [...apiFeedback, ...otherFeedback];
             localStorageService.saveFeedback(updatedFeedback);
-            console.log('💾 Updated localStorage with fresh received feedback');
+
           }
           
           setFeedback(apiFeedback);
-          console.log('🔄 Received feedback updated from API:', apiFeedback.length, 'items');
+
         } else {
-          console.warn('⚠️ API fetch failed, using localStorage data');
+
         }
       } catch (apiError) {
-        console.warn('⚠️ API fetch failed, using localStorage data:', apiError);
+
         // Continue using localStorage data
       }
     } catch (err) {

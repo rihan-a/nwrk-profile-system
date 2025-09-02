@@ -36,7 +36,7 @@ export const ProfileDashboard: React.FC<ProfileDashboardProps> = ({
   const fetchProfiles = async () => {
     try {
       setLoading(true);
-      console.log('Fetching profiles from:', '/api/profiles/list/all');
+
       
       const response = await fetch('/api/profiles/list/all', {
         headers: {
@@ -44,12 +44,11 @@ export const ProfileDashboard: React.FC<ProfileDashboardProps> = ({
         }
       });
       
-      console.log('Profiles response status:', response.status);
-      console.log('Profiles response headers:', response.headers);
+
       
       if (response.ok) {
         const data = await response.json();
-        console.log('Profiles data received:', data);
+
         setProfiles(data.profiles || []);
       } else {
         const errorData = await response.json().catch(() => ({}));
@@ -64,7 +63,7 @@ export const ProfileDashboard: React.FC<ProfileDashboardProps> = ({
 
   const fetchDepartments = async () => {
     try {
-      console.log('Fetching departments from:', '/api/profiles/departments/list');
+
       
       const response = await fetch('/api/profiles/departments/list', {
         headers: {
@@ -72,11 +71,11 @@ export const ProfileDashboard: React.FC<ProfileDashboardProps> = ({
         }
       });
       
-      console.log('Departments response status:', response.status);
+
       
       if (response.ok) {
         const data = await response.json();
-        console.log('Departments data received:', data);
+
         setDepartments(data.departments || []);
       } else {
         const errorData = await response.json().catch(() => ({}));

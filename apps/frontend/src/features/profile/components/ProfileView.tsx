@@ -47,9 +47,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onEditProfile }) => {
       setLoading(true);
       setError(null);
       
-      console.log('Fetching profile:', profileId);
       const authToken = localStorage.getItem('authToken');
-      console.log('Auth Token:', authToken);
       
       const response = await fetch(`/api/profiles/${profileId}`, {
         headers: {
@@ -57,11 +55,11 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onEditProfile }) => {
         }
       });
       
-      console.log('Response status:', response.status);
+
       
       if (response.ok) {
         const data = await response.json();
-        console.log('Profile data:', data);
+
         setProfile(data.profile);
       } else {
         const errorData = await response.json().catch(() => ({}));
@@ -89,25 +87,21 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ onEditProfile }) => {
     enhancedContent?: string;
     isEnhanced: boolean;
   }) => {
-    console.log('🎯 Feedback submission started:', feedbackData);
+
     
     if (id) {
       try {
         await createFeedback(id, feedbackData);
-        console.log('✅ Feedback created successfully');
-        
         // Refresh feedback list
         if (user) {
-          console.log('🔄 Refreshing feedback list...');
           await refreshFeedback(id, user);
-          console.log('✅ Feedback list refreshed');
         }
         
         // Trigger a global event to refresh browse profiles
         window.dispatchEvent(new CustomEvent('feedbackSubmitted', { 
           detail: { profileId: id } 
         }));
-        console.log('📡 Global refresh event dispatched');
+
       } catch (error) {
         console.error('❌ Error in feedback submission:', error);
       }

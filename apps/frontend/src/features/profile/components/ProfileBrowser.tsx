@@ -48,7 +48,7 @@ export const ProfileBrowser: React.FC<ProfileBrowserProps> = ({
   const fetchProfiles = async () => {
     try {
       setLoading(true);
-      console.log('Fetching profiles from:', '/api/profiles/browse');
+
       
       const response = await fetch('/api/profiles/browse', {
         headers: {
@@ -56,11 +56,11 @@ export const ProfileBrowser: React.FC<ProfileBrowserProps> = ({
         }
       });
       
-      console.log('Profiles response status:', response.status);
+
       
       if (response.ok) {
         const data = await response.json();
-        console.log('Profiles data received:', data);
+
         setProfiles(data.profiles || []);
       } else {
         const errorData = await response.json().catch(() => ({}));

@@ -27,7 +27,7 @@ export const useAIEnhancement = (): UseAIEnhancementReturn => {
       setError(null);
       setEnhancedText(null);
 
-      console.log('🤖 Starting AI enhancement for text:', text.substring(0, 50) + '...');
+
       
       const authToken = localStorage.getItem('authToken');
       if (!authToken) {
@@ -43,7 +43,7 @@ export const useAIEnhancement = (): UseAIEnhancementReturn => {
         body: JSON.stringify({ text, employeeName }),
       });
 
-      console.log('📡 AI enhancement response status:', response.status);
+
 
       if (!response.ok) {
         let errorMessage = 'Failed to enhance text';

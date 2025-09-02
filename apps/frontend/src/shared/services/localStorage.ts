@@ -33,7 +33,7 @@ export class LocalStorageService {
       localStorage.setItem(FEEDBACK_STORAGE_KEY, JSON.stringify(feedback));
       localStorage.setItem(FEEDBACK_METADATA_KEY, JSON.stringify(metadata));
       
-      console.log('💾 Feedback saved to localStorage:', feedback.length, 'items');
+
     } catch (error) {
       console.error('❌ Failed to save feedback to localStorage:', error);
     }
@@ -44,12 +44,12 @@ export class LocalStorageService {
     try {
       const stored = localStorage.getItem(FEEDBACK_STORAGE_KEY);
       if (!stored) {
-        console.log('📭 No feedback found in localStorage');
+
         return [];
       }
 
       const feedback = JSON.parse(stored) as Feedback[];
-      console.log('📂 Feedback loaded from localStorage:', feedback.length, 'items');
+
       return feedback;
     } catch (error) {
       console.error('❌ Failed to load feedback from localStorage:', error);
@@ -63,7 +63,7 @@ export class LocalStorageService {
       const existing = this.loadFeedback();
       const updated = [feedback, ...existing];
       this.saveFeedback(updated);
-      console.log('➕ Feedback added to localStorage:', feedback.id);
+
     } catch (error) {
       console.error('❌ Failed to add feedback to localStorage:', error);
     }
@@ -77,7 +77,7 @@ export class LocalStorageService {
         f.id === updatedFeedback.id ? updatedFeedback : f
       );
       this.saveFeedback(updated);
-      console.log('✏️ Feedback updated in localStorage:', updatedFeedback.id);
+
     } catch (error) {
       console.error('❌ Failed to update feedback in localStorage:', error);
     }
@@ -89,7 +89,7 @@ export class LocalStorageService {
       const existing = this.loadFeedback();
       const updated = existing.filter(f => f.id !== feedbackId);
       this.saveFeedback(updated);
-      console.log('🗑️ Feedback removed from localStorage:', feedbackId);
+
     } catch (error) {
       console.error('❌ Failed to remove feedback from localStorage:', error);
     }
@@ -118,7 +118,7 @@ export class LocalStorageService {
     try {
       localStorage.removeItem(FEEDBACK_STORAGE_KEY);
       localStorage.removeItem(FEEDBACK_METADATA_KEY);
-      console.log('🧹 Feedback data cleared from localStorage');
+
     } catch (error) {
       console.error('❌ Failed to clear feedback from localStorage:', error);
     }
@@ -130,17 +130,11 @@ export class LocalStorageService {
       const metadata = this.getMetadata();
       const allFeedback = this.loadFeedback();
       
-      console.log('🔍 Checking for stale feedback data...');
-      console.log('📊 Current feedback count:', allFeedback.length);
-      console.log('📊 Metadata total count:', metadata?.totalCount);
+
       
       // If there's a mismatch or suspiciously high count, clear the data
       if (allFeedback.length > 50 || (metadata && Math.abs(allFeedback.length - metadata.totalCount) > 5)) {
-        console.log('⚠️ Detected potentially stale feedback data, clearing...');
         this.clearFeedback();
-        console.log('✅ Stale feedback data cleared');
-      } else {
-        console.log('✅ Feedback data appears clean');
       }
     } catch (error) {
       console.error('❌ Failed to check for stale feedback:', error);

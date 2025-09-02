@@ -31,8 +31,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Debug: Log user state changes
   useEffect(() => {
-    console.log('👤 User state changed:', user);
-    console.log('🔐 isAuthenticated:', !!user);
+
   }, [user]);
 
   // Check for existing session on mount
@@ -68,7 +67,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (credentials: LoginRequest) => {
     try {
-      console.log('🔐 Login attempt:', credentials);
+
       setIsLoading(true);
       const response = await fetch('http://localhost:3001/api/auth/login', {
         method: 'POST',
@@ -78,8 +77,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         body: JSON.stringify(credentials),
       });
 
-      console.log('📡 Login response status:', response.status);
-      console.log('📡 Login response headers:', response.headers);
+
 
       if (!response.ok) {
         let errorMessage = 'Login failed';
@@ -101,12 +99,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
 
       const data: AuthResponse = await response.json();
-      console.log('✅ Login success:', data);
+
       setUser(data.user);
       
       if (data.token) {
         localStorage.setItem('authToken', data.token);
-        console.log('💾 Token saved to localStorage');
+
       }
     } catch (error) {
       console.error('💥 Login error:', error);

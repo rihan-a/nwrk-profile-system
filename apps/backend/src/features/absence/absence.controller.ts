@@ -88,7 +88,7 @@ export class AbsenceController {
     try {
       const { requestId } = req.params;
       const { status } = req.body;
-      const managerId = (req as any).user?.id;
+      const managerId = (req as Request & { user?: { id: string; role: string } }).user?.id;
 
       if (!managerId) {
         res.status(401).json({
@@ -139,7 +139,7 @@ export class AbsenceController {
   async deleteAbsenceRequest(req: Request, res: Response): Promise<void> {
     try {
       const { requestId, employeeId } = req.params;
-      const currentUserId = (req as any).user?.id;
+      const currentUserId = (req as Request & { user?: { id: string; role: string } }).user?.id;
 
       if (!currentUserId) {
         res.status(401).json({
@@ -151,7 +151,7 @@ export class AbsenceController {
 
       // Check if user is the owner or a manager
       const isOwner = currentUserId === employeeId;
-      const isManager = (req as any).user?.role === 'manager';
+      const isManager = (req as Request & { user?: { id: string; role: string } }).user?.role === 'manager';
 
       if (!isOwner && !isManager) {
         res.status(403).json({
