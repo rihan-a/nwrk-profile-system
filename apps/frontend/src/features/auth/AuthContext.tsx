@@ -82,9 +82,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.log('📡 Login response headers:', response.headers);
 
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error('❌ Login error response:', errorData);
-        throw new Error(errorData.error || 'Login failed');
+        let errorMessage = 'Login failed';
+        
+        if (response.status === 429) {
+          errorMessage = 'Too many login attempts. Please wait a few minutes before trying again.';
+        } else {
+          try {
+            const errorData = await response.json();
+            errorMessage = errorData.error || errorMessage;
+          } catch {
+            // If response is not JSON, use status text
+            errorMessage = response.statusText || errorMessage;
+          }
+        }
+        
+        console.error('❌ Login error response:', { status: response.status, message: errorMessage });
+        throw new Error(errorMessage);
       }
 
       const data: AuthResponse = await response.json();

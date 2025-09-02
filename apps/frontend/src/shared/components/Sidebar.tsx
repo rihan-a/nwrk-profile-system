@@ -7,7 +7,6 @@ import {
   Users, 
   MessageSquare, 
   Calendar, 
-  Settings, 
   Home,
   Shield,
   Briefcase
@@ -37,7 +36,7 @@ export const Sidebar: React.FC = () => {
       name: 'My Profile',
       href: `/profile/${user.id}`,
       icon: <User className="w-5 h-5" />,
-      roles: [UserRole.MANAGER, UserRole.EMPLOYEE]
+      roles: [UserRole.MANAGER, UserRole.EMPLOYEE, UserRole.COWORKER]
     },
     {
       name: 'All Profiles',
@@ -46,23 +45,35 @@ export const Sidebar: React.FC = () => {
       roles: [UserRole.MANAGER]
     },
     {
-      name: 'Feedback',
+      name: 'Browse Profiles',
+      href: '/profiles/browse',
+      icon: <Users className="w-5 h-5" />,
+      roles: [UserRole.COWORKER, UserRole.EMPLOYEE]
+    },
+    {
+      name: 'Feedback Received',
       href: '/feedback',
       icon: <MessageSquare className="w-5 h-5" />,
       roles: [UserRole.MANAGER, UserRole.EMPLOYEE, UserRole.COWORKER]
     },
     {
-      name: 'Absence Requests',
+      name: 'My Absence',
       href: '/absence',
       icon: <Calendar className="w-5 h-5" />,
-      roles: [UserRole.MANAGER, UserRole.EMPLOYEE]
+      roles: [UserRole.EMPLOYEE, UserRole.COWORKER]
     },
     {
-      name: 'Settings',
-      href: '/settings',
-      icon: <Settings className="w-5 h-5" />,
+      name: 'My Absence',
+      href: '/manager/absence',
+      icon: <Calendar className="w-5 h-5" />,
       roles: [UserRole.MANAGER]
-    }
+    },
+    {
+      name: 'Team Management',
+      href: '/manager/team',
+      icon: <Users className="w-5 h-5" />,
+      roles: [UserRole.MANAGER]
+    },
   ];
 
   const filteredNavigation = navigationItems.filter(item => 
@@ -73,46 +84,48 @@ export const Sidebar: React.FC = () => {
     switch (user.role) {
       case UserRole.MANAGER:
         return (
-          <div className="px-3 py-2">
-            <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
-              Manager Tools
+          <div className="mb-4 p-3 bg-gradient-to-r from-green-900 to-blue-900 border border-green-700">
+            <div className="text-xs font-medium text-green-200 mb-2 flex items-center">
+              <Shield className="w-3 h-3 mr-1" />
+              Manager Access
             </div>
             <div className="space-y-1">
-              <div className="flex items-center px-3 py-2 text-sm text-gray-600">
-                <Shield className="w-4 h-4 mr-2 text-green-600" />
-                Full System Access
+              <div className="text-xs text-gray-300 leading-relaxed">
+                • Full system access
               </div>
-              <div className="flex items-center px-3 py-2 text-sm text-gray-600">
-                <Users className="w-4 h-4 mr-2 text-blue-600" />
-                Manage All Profiles
+              <div className="text-xs text-gray-300 leading-relaxed">
+                • Manage all profiles
+              </div>
+              <div className="text-xs text-gray-300 leading-relaxed">
+                • Team absence management
               </div>
             </div>
           </div>
         );
       case UserRole.EMPLOYEE:
         return (
-          <div className="px-3 py-2">
-            <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+          <div className="mb-4 p-3 bg-gradient-to-r from-blue-900 to-indigo-900 border border-blue-700">
+            <div className="text-xs font-medium text-blue-200 mb-2 flex items-center">
+              <User className="w-3 h-3 mr-1" />
               Employee Access
             </div>
             <div className="space-y-1">
-              <div className="flex items-center px-3 py-2 text-sm text-gray-600">
-                <User className="w-4 h-4 mr-2 text-blue-600" />
-                Own Profile + Absence
+              <div className="text-xs text-gray-300 leading-relaxed">
+                • Own profile & absence management
               </div>
             </div>
           </div>
         );
       case UserRole.COWORKER:
         return (
-          <div className="px-3 py-2">
-            <div className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+          <div className="mb-4 p-3 bg-gradient-to-r from-purple-900 to-pink-900 border border-purple-700">
+            <div className="text-xs font-medium text-purple-200 mb-2 flex items-center">
+              <Briefcase className="w-3 h-3 mr-1" />
               Co-worker Access
             </div>
             <div className="space-y-1">
-              <div className="flex items-center px-3 py-2 text-sm text-gray-600">
-                <Briefcase className="w-4 h-4 mr-2 text-purple-600" />
-                Public Data + Feedback
+              <div className="text-xs text-gray-300 leading-relaxed">
+                • Public data & feedback access
               </div>
             </div>
           </div>
@@ -123,13 +136,10 @@ export const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className="w-64 bg-white shadow-sm border-r border-gray-200 min-h-screen">
+    <div className="w-64 bg-gray-900 shadow-sm border-r border-gray-700 min-h-screen">
       <div className="p-4">
         <div className="flex items-center space-x-3 mb-6">
-                      <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-            <Shield className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-lg font-semibold text-gray-900">Menu</span>
+          <span className="text-lg font-semibold text-white">Menu</span>
         </div>
 
         {/* Role-specific info */}
@@ -143,14 +153,14 @@ export const Sidebar: React.FC = () => {
               <NavLink
                 key={item.name}
                 to={item.href}
-                className={`group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+                className={`group flex items-center px-3 py-2 text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-blue-100 text-blue-700 border-r-2 border-blue-600'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    ? 'bg-blue-900 text-blue-200 border-r-2 border-blue-600'
+                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
                 }`}
               >
                 <span className={`mr-3 ${
-                  isActive ? 'text-blue-600' : 'text-gray-400 group-hover:text-gray-500'
+                  isActive ? 'text-blue-400' : 'text-gray-500 group-hover:text-gray-300'
                 }`}>
                   {item.icon}
                 </span>

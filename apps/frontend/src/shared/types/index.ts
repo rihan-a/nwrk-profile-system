@@ -32,7 +32,15 @@ export interface EmployeeProfile {
     phone: string;
     relationship: string;
   };
+  performanceRating?: number;
+  certifications?: string[];
+  workHistory?: {
+    company: string;
+    position: string;
+    duration: string;
+  }[];
   feedback: Feedback[];
+  feedbackCount?: number; // Count of feedback received (for browse view)
   absenceRequests: AbsenceRequest[];
 }
 
@@ -40,6 +48,7 @@ export interface Feedback {
   id: string;
   fromUserId: string;
   fromUserName: string;
+  toUserId: string; // Add recipient ID for role-based filtering
   content: string;
   enhancedContent?: string;
   isEnhanced: boolean;
