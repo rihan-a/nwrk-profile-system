@@ -9,12 +9,33 @@ A simple HR app where employees can manage their profiles, request time off, and
    npm run install:all
    ```
 
-2. **Start both frontend and backend:**
+2. **Set up environment variables:**
+   
+   Create a `.env` file in the `apps/backend/` directory:
+   ```bash
+   # Create the environment file
+   touch apps/backend/.env
+   ```
+   
+   Add your Google Gemini API key to the file:
+   ```env
+   # Google Gemini API Key for AI feedback enhancement
+   # Get your free API key from: https://makersuite.google.com/app/apikey
+   GEMINI_API_KEY=your_actual_api_key_here
+   
+   # Optional: Server Configuration
+   PORT=3001
+   NODE_ENV=development
+   ```
+   
+   **Note:** You'll receive the API key via email. Without this key, the AI feedback enhancement feature won't work, but the rest of the app will function normally.
+
+3. **Start both frontend and backend:**
    ```bash
    npm run dev
    ```
 
-3. **Open your browser to:** http://localhost:5173
+4. **Open your browser to:** http://localhost:5173
 
 ## Demo Users
 
@@ -41,6 +62,17 @@ Try these accounts to see how different roles work:
 - **Mock data:** No database needed for this demo - everything lives in memory
 - **Simple auth:** Just role-based, no complex login system since it's a demo
 - **AI integration:** Added Gemini API to polish feedback text automatically
+
+## Troubleshooting
+
+**AI Enhancement Not Working:**
+- Make sure you've created the `.env` file in `apps/backend/`
+- Verify your `GEMINI_API_KEY` is correct
+- Check the backend console for API errors
+- The app will work without AI enhancement - feedback will just show the original text
+
+**Authentication Issues:**
+- Clear browser localStorage if you encounter login problems
 
 ## What I'd Improve With More Time
 
