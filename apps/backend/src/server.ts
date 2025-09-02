@@ -1,27 +1,22 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import rateLimit from 'express-rate-limit';
+
 import dotenv from 'dotenv';
 import { authRoutes } from './features/auth/auth.routes.js';
-import { profileRoutes } from './features/profiles/profile.routes.js';
+import profileRoutes from './features/profiles/profile.routes.js';
 import { feedbackRoutes } from './features/feedback/feedback.routes.js';
 import { absenceRoutes } from './features/absence/absence.routes.js';
+import configRoutes from './features/config/config.routes.js';
 
-dotenv.config();
+// Load environment variables from .env.backend file
+dotenv.config({ path: '.env.backend' });
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Security middleware
 app.use(helmet());
-
-// Rate limiting
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
-});
-app.use(limiter);
 
 // CORS
 app.use(cors({
@@ -38,11 +33,14 @@ app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
+
+
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/profiles', profileRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/absence', absenceRoutes);
+app.use('/api/config', configRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {
