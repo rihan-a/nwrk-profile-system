@@ -1,0 +1,215 @@
+import React, { useState, useEffect } from 'react';
+import { Card } from '../../../shared/components/ui/Card';
+import { Input } from '../../../shared/components/ui/Input';
+import { Button } from '../../../shared/components/ui/Button';
+import { Badge } from '../../../shared/components/ui/Badge';
+import { ProfileCard } from './ProfileCard';
+import { EmployeeProfile, UserRole } from '../../../shared/types';
+import { useAuth } from '../../auth/AuthContext';
+
+interface ProfileDashboardProps {
+  onViewProfile: (id: string) => void;
+  onEditProfile: (id: string) => void;
+}
+
+export const ProfileDashboard: React.FC<ProfileDashboardProps> = ({
+  onViewProfile,
+  onEditProfile
+}) => {
+  const { user } = useAuth();
+  const [profiles, setProfiles] = useState<EmployeeProfile[]>([]);
+  const [filteredProfiles, setFilteredProfiles] = useState<EmployeeProfile[]>([]);
+  const [departments, setDepartments] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedDepartment, setSelectedDepartment] = useState<string>('');
+
+  useEffect(() => {
+    fetchProfiles();
+    fetchDepartments();
+  }, []);
+
+  useEffect(() => {
+    filterProfiles();
+  }, [profiles, searchTerm, selectedDepartment]);
+
+  const fetchProfiles = async () => {
+    try {
+      setLoading(true);
+      console.log('Fetching profiles from:', '/api/profiles/list/all');
+      
+      const response = await fetch('/api/profiles/list/all', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        }
+      });
+      
+      console.log('Profiles response status:', response.status);
+      console.log('Profiles response headers:', response.headers);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Profiles data received:', data);
+        setProfiles(data.profiles || []);
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Failed to fetch profiles:', errorData);
+      }
+    } catch (error) {
+      console.error('Network error fetching profiles:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchDepartments = async () => {
+    try {
+      console.log('Fetching departments from:', '/api/profiles/departments/list');
+      
+      const response = await fetch('/api/profiles/departments/list', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        }
+      });
+      
+      console.log('Departments response status:', response.status);
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Departments data received:', data);
+        setDepartments(data.departments || []);
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Failed to fetch departments:', errorData);
+      }
+    } catch (error) {
+      console.error('Network error fetching departments:', error);
+    }
+  };
+
+  const filterProfiles = () => {
+    let filtered = profiles;
+
+    // Apply search filter
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(profile =>
+        profile.firstName.toLowerCase().includes(term) ||
+        profile.lastName.toLowerCase().includes(term) ||
+        profile.position.toLowerCase().includes(term) ||
+        profile.department.toLowerCase().includes(term)
+      );
+    }
+
+    // Apply department filter
+    if (selectedDepartment) {
+      filtered = filtered.filter(profile => profile.department === selectedDepartment);
+    }
+
+    setFilteredProfiles(filtered);
+  };
+
+  const clearFilters = () => {
+    setSearchTerm('');
+    setSelectedDepartment('');
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="animate-spin h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Employee Profiles</h1>
+          <p className="text-gray-600">Manage and view all employee information</p>
+        </div>
+        <Badge variant="info" size="lg">
+          {filteredProfiles.length} employees
+        </Badge>
+      </div>
+
+      {/* Debug Info */}
+      <Card>
+        <div className="text-sm text-gray-600">
+          <p>Total profiles loaded: {profiles.length}</p>
+          <p>Departments loaded: {departments.length}</p>
+          <p>Filtered profiles: {filteredProfiles.length}</p>
+          <p>Search term: "{searchTerm}"</p>
+          <p>Selected department: "{selectedDepartment}"</p>
+        </div>
+      </Card>
+
+      {/* Search and Filters */}
+      <Card>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Input
+            label="Search Employees"
+            placeholder="Search by name, position, or department..."
+            value={searchTerm}
+            onChange={setSearchTerm}
+          />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Department
+            </label>
+            <select
+              value={selectedDepartment}
+              onChange={(e) => setSelectedDepartment(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="">All Departments</option>
+              {departments.map(dept => (
+                <option key={dept} value={dept}>{dept}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-end">
+            <Button
+              variant="outline"
+              onClick={clearFilters}
+              className="w-full"
+            >
+              Clear Filters
+            </Button>
+          </div>
+        </div>
+      </Card>
+
+      {/* Profiles Grid */}
+      {filteredProfiles.length === 0 ? (
+        <Card>
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-lg">No employees found matching your criteria</p>
+            <Button
+              variant="outline"
+              onClick={clearFilters}
+              className="mt-4"
+            >
+              Clear Filters
+            </Button>
+          </div>
+        </Card>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {filteredProfiles.map(profile => (
+            <ProfileCard
+              key={profile.id}
+              profile={profile}
+              userRole={user?.role || UserRole.COWORKER}
+              isOwnProfile={user?.id === profile.id}
+              onViewProfile={onViewProfile}
+              onEditProfile={onEditProfile}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
